@@ -20,7 +20,11 @@ export function retrieveKnowledge(ticket: TicketInput, articles: KnowledgeCandid
 
 export function assessTicket(ticket: TicketInput, articles: KnowledgeCandidate[]) {
   const body = `${ticket.title} ${ticket.description}`.toLowerCase();
-  const match = categoryRules.map((rule) => ({ rule, matches: rule.terms.filter((term) => body.includes(term)).length })).sort((left, right) => right.matches - left.matches)[0];
+  const match = categoryRules.map((rule) => {
+    const termMatches = rule.terms.filter((term) => body.includes(term)).length;
+    const serviceMatch = rule.category.toLowerCase().includes(ticket.service.toLowerCase()) ? 3 : 0;
+    return { rule, matches: termMatches + serviceMatch };
+  }).sort((left, right) => right.matches - left.matches)[0];
   const knowledge = retrieveKnowledge(ticket, articles);
   const urgent = ticket.priority === "P1" || ticket.priority === "P2" || /security|data loss|outage|all users/.test(body);
   const category = match?.matches ? match.rule.category : "General service request";
