@@ -6,7 +6,8 @@ import { assessTicket } from "../../../lib/ticket-intelligence";
 export async function GET() {
   const db = getDb();
   const tickets = await db.select().from(serviceTickets).orderBy(desc(serviceTickets.createdAt)).limit(50);
-  return Response.json({ tickets });
+  const assessments = await db.select().from(ticketAssessments);
+  return Response.json({ tickets: tickets.map((ticket) => ({ ...ticket, assessment: assessments.find((assessment) => assessment.ticketId === ticket.id) ?? null })) });
 }
 
 export async function POST(request: Request) {
