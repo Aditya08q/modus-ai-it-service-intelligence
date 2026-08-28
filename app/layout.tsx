@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Modus AI | Procurement Intelligence",
-  description: "Explainable process, role and skill intelligence for enterprise AI transformation.",
+  title: "Modus AI | IT Service Intelligence",
+  description: "Explainable ticket, role and skill intelligence for enterprise IT transformation.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

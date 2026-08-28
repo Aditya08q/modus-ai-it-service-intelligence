@@ -1,10 +1,10 @@
-# Modus AI — Process × Role × Skill Intelligence Graph
+# Modus AI — IT Service Desk Intelligence Graph
 
-An enterprise AI application for tracing how AI changes work across procurement operations. It implements Assignment 11 from the Modus Enterprise AI Build Challenge.
+An enterprise AI application for tracing how AI changes work across IT service operations. It implements Assignment 11 from the Modus Enterprise AI Build Challenge.
 
 ## What it demonstrates
 
-- A usable frontend for exploring the Procurement operating model.
+- A usable frontend for exploring the IT Service Desk operating model.
 - Persistent D1 data model for intelligence records and their evidence sources.
 - Backend APIs to create, retrieve and systematically assess multiple activity cases.
 - An explainable impact engine that classifies activities as **Automate**, **Augment** or **Redesign** using observable inputs: standardisation, data quality, decision risk and human judgment.
@@ -38,4 +38,4 @@ The deployment configuration declares a `DB` D1 binding. Apply the generated mig
 
 ## Demo narrative
 
-Start at the role impact map, select **Procurement Analyst**, and show the connected activities and changing skills. Then select **Bid comparison** to expose its evidence trail and explain why the activity is marked `Automate` rather than a generic LLM conclusion. Finally, submit multiple activities to `/api/analyze` to show the same governed logic applied consistently at scale.
+Start at the role impact map, select **Service Desk Analyst**, and show the connected activities and changing skills. Then select **Ticket classification** to expose its evidence trail and explain why the activity is marked `Automate` rather than a generic LLM conclusion. Finally, submit multiple activities to `/api/analyze` to show the same governed logic applied consistently at scale.
