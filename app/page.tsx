@@ -36,9 +36,23 @@ function GraphNode({ label, sub, className, selected = false }: { label: string;
 function TicketIntake() {
   const [ticket, setTicket] = useState({ title: "", service: "", description: "" });
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [result, setResult] = useState<{ category: string; assignmentGroup: string; confidence: number; recommendation: string; escalationRequired: boolean } | null>(null);
   const validate = () => {
     if (!ticket.title.trim() || !ticket.service || !ticket.description.trim()) { setError("Add a title, service, and description before analysing the ticket."); return false; }
     setError(""); return true;
   };
-  return <section className="ticket-intake" id="new-ticket"><div><p className="eyebrow">LIVE TICKET INTAKE</p><h2>Analyse a new service request</h2><p>Enter a ticket to classify it, retrieve relevant knowledge, and recommend the right route.</p></div><form><label>Ticket title<input value={ticket.title} onChange={(event) => setTicket({ ...ticket, title: event.target.value })} placeholder="e.g. VPN disconnects after sign-in" /></label><label>Service<select value={ticket.service} onChange={(event) => setTicket({ ...ticket, service: event.target.value })}><option value="" disabled>Select service</option><option>Identity</option><option>Network</option><option>Collaboration</option><option>Workplace</option></select></label><label className="ticket-wide">Description<textarea value={ticket.description} onChange={(event) => setTicket({ ...ticket, description: event.target.value })} placeholder="Describe what happened, who is affected, and any error message." /></label>{error && <p className="ticket-error" role="alert">{error}</p>}<button type="button" onClick={validate}>Analyse ticket <span>→</span></button></form></section>;
+  const submit = async () => {
+    if (!validate()) return;
+    setIsSubmitting(true); setResult(null);
+    try {
+      const response = await fetch("/api/tickets", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...ticket, requester: "demo.user@example.com", priority: "P3" }) });
+      const data = await response.json() as { error?: string; assessment?: { category: string; assignmentGroup: string; confidence: number; recommendation: string; escalationRequired: boolean } };
+      if (!response.ok || !data.assessment) throw new Error(data.error ?? "Unable to analyse this ticket.");
+      setResult(data.assessment);
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "Unable to analyse this ticket."); }
+    finally { setIsSubmitting(false); }
+  };
+  return <section className="ticket-intake" id="new-ticket"><div><p className="eyebrow">LIVE TICKET INTAKE</p><h2>Analyse a new service request</h2><p>Enter a ticket to classify it, retrieve relevant knowledge, and recommend the right route.</p></div><form><label>Ticket title<input value={ticket.title} onChange={(event) => setTicket({ ...ticket, title: event.target.value })} placeholder="e.g. VPN disconnects after sign-in" /></label><label>Service<select value={ticket.service} onChange={(event) => setTicket({ ...ticket, service: event.target.value })}><option value="" disabled>Select service</option><option>Identity</option><option>Network</option><option>Collaboration</option><option>Workplace</option></select></label><label className="ticket-wide">Description<textarea value={ticket.description} onChange={(event) => setTicket({ ...ticket, description: event.target.value })} placeholder="Describe what happened, who is affected, and any error message." /></label>{error && <p className="ticket-error" role="alert">{error}</p>}{result && <TicketResult result={result} />}<button type="button" onClick={submit} disabled={isSubmitting}>{isSubmitting ? "Analysing…" : "Analyse ticket"} <span>→</span></button></form></section>;
 }
+function TicketResult({ result }: { result: { category: string; assignmentGroup: string; confidence: number; recommendation: string; escalationRequired: boolean } }) { return <div className="ticket-result"><span>AI assessment</span><strong>{result.category} · {result.confidence}% confidence</strong><p>{result.recommendation}</p><small>{result.escalationRequired ? "Escalation required" : `Route to ${result.assignmentGroup}`}</small></div>; }
