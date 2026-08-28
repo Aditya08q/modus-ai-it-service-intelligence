@@ -1,0 +1,5 @@
+[
+  {"title":"VPN not connecting after MFA approval","description":"I can sign in but the VPN disconnects immediately.","requester":"demo.user@example.com","service":"Network","priority":"P3"},
+  {"title":"Password reset required","description":"My password expired and I cannot access the employee portal.","requester":"demo.user@example.com","service":"Identity","priority":"P3"},
+  {"title":"Outlook error on startup","description":"The Outlook desktop application displays an error when I open it.","requester":"demo.user@example.com","service":"Collaboration","priority":"P2"}
+]
