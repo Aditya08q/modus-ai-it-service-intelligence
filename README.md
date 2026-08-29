@@ -21,6 +21,9 @@ The assessment engine is deliberately deterministic: an LLM may help summarize e
 - `GET /api/intelligence` retrieves stored records with linked evidence.
 - `POST /api/intelligence` validates and persists a complete intelligence record.
 - `POST /api/analyze` assesses many activity cases in a single request.
+- `GET` / `POST /api/knowledge` manages approved, traceable IT knowledge articles.
+- `GET` / `POST /api/tickets` retrieves and analyses individual service tickets.
+- `POST /api/tickets/batch` processes up to 100 tickets systematically.
 
 Example analysis request:
 
@@ -33,6 +36,8 @@ Example analysis request:
 1. Install dependencies with `npm ci`.
 2. Generate the D1 migration with `npm run db:generate`.
 3. Run `npm run dev`.
+
+For the complete local ticket workflow, initialize the local database once with `npx wrangler d1 migrations apply DB --local`.
 
 The deployment configuration declares a `DB` D1 binding. Apply the generated migration before demonstrating write operations.
 
