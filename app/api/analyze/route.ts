@@ -10,7 +10,5 @@ export async function POST(request: Request) {
   const payload = await request.json() as { cases?: ActivityCase[] };
   if (!Array.isArray(payload.cases) || !payload.cases.length) return Response.json({ error: "Provide one or more activity cases." }, { status: 400 });
   if (payload.cases.some((item) => !item.activity || [item.standardisation, item.dataQuality, item.decisionRisk, item.humanJudgment].some((score) => typeof score !== "number" || score < 0 || score > 100))) return Response.json({ error: "Each case needs an activity and four scores from 0 to 100." }, { status: 400 });
-  // The deterministic layer makes every recommendation reproducible and traceable.
-  // A locally hosted Ollama model can enrich these results without becoming the source of truth.
   return Response.json({ assessments: payload.cases.map(classify), engine: "explainable-impact-v1" });
 }
