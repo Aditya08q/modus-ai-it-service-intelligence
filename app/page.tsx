@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Evidence = { source: string; note: string; confidence: number };
 type Insight = { id: string; activity: string; process: string; role: string; impact: "Automate" | "Augment" | "Redesign"; confidence: number; skill: string; rationale: string; evidence: Evidence[] };
+type TicketHistoryItem = { id: string; title: string; service: string; priority: string; createdAt: string; assessment: { category: string; assignmentGroup: string; confidence: number; escalationRequired: boolean } | null };
 
 const insights: Insight[] = [
   { id: "IT-01", activity: "Ticket classification", process: "Incident Management", role: "Service Desk Analyst", impact: "Automate", confidence: 92, skill: "Exception management", rationale: "AI can identify the incident category, affected service and likely assignment group from a ticket, while low-confidence classifications are routed to an analyst.", evidence: [{ source: "ITIL incident practice", note: "Classification and prioritisation are core incident activities", confidence: 91 }, { source: "Service desk policy", note: "Humans approve high-impact incident routing", confidence: 94 }] },
